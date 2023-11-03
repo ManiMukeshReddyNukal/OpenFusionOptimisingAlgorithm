@@ -1,18 +1,19 @@
-class Solution(object):
-    def allPathsSourceTarget(self, graph):
-        """
-        :type graph: List[List[int]]
-        :rtype: List[List[int]]
-        """
-        target=len(graph)-1
-        results=[]
-        def backtrack(curr_node,path):
-            if curr_node==target:
-                results.append(list(path))
-            for next_node in graph[curr_node]:
-                path.append(next_node)
-                backtrack(next_node,path)
+class Solution:
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        def dfs(node):
+            path.append(node)
+            if node == len(graph) - 1:
+                paths.append(path.copy())
+                return
+
+            next_nodes = graph[node]
+            for next_node in next_nodes:
+                dfs(next_node)
                 path.pop()
-        path=[0]
-        backtrack(0,path)
-        return results
+
+        paths = []
+        path = []
+        if not graph or len(graph) == 0:
+            return paths
+        dfs(0)
+        return paths
