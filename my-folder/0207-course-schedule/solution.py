@@ -1,25 +1,20 @@
 class Solution(object):
     def canFinish(self, numCourses, prerequisites):
-        """
-        :type numCourses: int
-        :type prerequisites: List[List[int]]
-        :rtype: bool
-        """
-        req={i:[] for i in range(numCourses)}
-        s=set()
-        for i,j in prerequisites:
-            req[i].append(j)
+        coursepre=[[] for _ in range(numCourses)]
+        for a,b in prerequisites:
+            coursepre[a].append(b)
+        visited=set()
         def dfs(node):
-            if node in s:
+            if node in visited:
                 return False
-            if len(req[node])==0:
+            if len(coursepre[node])==0:
                 return True
-            s.add(node)
-            for c in req[node]:
-                if not dfs(c):return False
-            s.remove(node)
-            req[node]=[]
+            visited.add(node)
+            for c in coursepre[node]:
+                if not dfs(c): return False
+            visited.remove(node)
+            coursepre[node]=[]
             return True
         for i in range(numCourses):
-            if not dfs(i):return False
+            if not dfs(i): return False
         return True
