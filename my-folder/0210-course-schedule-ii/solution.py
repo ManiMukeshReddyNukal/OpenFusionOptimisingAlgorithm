@@ -3,26 +3,25 @@ class Solution(object):
         """
         :type numCourses: int
         :type prerequisites: List[List[int]]
-        :rtype: bool
+        :rtype: List[int]
         """
-        premap=[[] for _ in range(numCourses)]
+        pre=[[] for _ in range(numCourses)]
         for a,b in prerequisites:
-            premap[a].append(b)
+            pre[a].append(b)
+        out=[]
         visit,cycle=set(),set()
-        output=[]
         def dfs(node):
             if node in cycle:
                 return False
             if node in visit:
                 return True
             cycle.add(node)
-            for a in premap[node]:
-                if dfs(a)==False:
-                    return False
+            for c in pre[node]:
+                if not dfs(c): return False
             cycle.remove(node)
             visit.add(node)
-            output.append(node)
-        for i in range(numCourses):
-            if dfs(i)==False:
-                return []
-        return output
+            out.append(node)
+            return True
+        for c in range(numCourses):
+            if not dfs(c): return []
+        return out
