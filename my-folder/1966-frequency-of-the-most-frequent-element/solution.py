@@ -1,23 +1,15 @@
-class Solution(object):
-    def maxFrequency(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: int
-        """
+class Solution:
+    def maxFrequency(self, nums: List[int], k: int) -> int:
         nums.sort()
+        mf=0
         i=j=0
+        n=len(nums)
         total=0
-        res=0
-        while j<len(nums):
+        while j<n:
             total+=nums[j]
-            while ( nums[j] * (j-i+1) > total + k):
+            while nums[j]*(j-i+1)>total+k:
                 total-=nums[i]
                 i+=1
-            res=max(res,j-i+1)
+            mf=max(mf,j-i+1)
             j+=1
-        return res
-
-
-        
-        
+        return mf
