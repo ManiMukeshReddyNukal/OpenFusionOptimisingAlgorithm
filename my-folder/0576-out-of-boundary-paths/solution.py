@@ -1,21 +1,24 @@
 class Solution:
     def findPaths(self, m: int, n: int, maxMove: int, startRow: int, startColumn: int) -> int:
-        d={}
-        MOD = 10**9 + 7
-        def calculate(maxMove,x,y):
-            if min(m-x,n-y,x+1,y+1)>maxMove:
-                d[x*10000+y*100+maxMove]=0
-                return 0
-            if x*10000+y*100+maxMove in d:
-                return d[x*10000+y*100+maxMove]
-            if x<0 or x>=m or y<0 or y>=n:
-                d[x*10000+y*100+maxMove]=1
-                return 1
-            if maxMove==0:
-                d[x*10000+y*100+maxMove]=0
-                return 0
-            d[x*10000+y*100+maxMove]=(calculate(maxMove-1,x+1,y)+calculate(maxMove-1,x-1,y)+calculate(maxMove-1,x,y+1)+calculate(maxMove-1,x,y-1)) % MOD
-            return d[x*10000+y*100+maxMove]
-        return calculate(maxMove,startRow,startColumn)
-        
-        
+        MOD=10**9+7
+        dp=[[0 for _ in range(n)] for _ in range(m)]
+        dp[startRow][startColumn]=1
+        count=0
+        for k in range(1,maxMove+1):
+            temp=[[0 for _ in range(n)] for _ in range(m)]
+            for i in range(m):
+                for j in range(n):
+                    if i==m-1:
+                        count=(count+dp[i][j])%MOD
+                    if i==0:
+                        count=(count+dp[i][j])%MOD
+                    if j==n-1:
+                        count=(count+dp[i][j])%MOD
+                    if j==0:
+                        count=(count+dp[i][j])%MOD
+                    temp[i][j]=(((dp[i-1][j] if i>0 else 0)+(dp[i+1][j] if i<m-1 else 0))%MOD + ((dp[i][j+1] if j<n-1 else 0) + (dp[i][j-1] if j>0 else 0))%MOD )% MOD
+            dp=temp
+        return count
+
+
+
