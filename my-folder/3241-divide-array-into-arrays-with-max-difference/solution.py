@@ -1,21 +1,9 @@
-class Solution(object):
-    def divideArray(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[List[int]]
-        """
-        n=len(nums)
+class Solution:
+    def divideArray(self, nums: List[int], k: int) -> List[List[int]]:
         nums.sort()
-        out=[]
-        i=0
-        while i < n:
-            if nums[i+2]<= nums[i]+k:
-                out.append(nums[i:i+3])
-            else:
+        ans = []
+        for i in range(0, len(nums), 3):
+            if nums[i + 2] - nums[i] > k:
                 return []
-            i+=3
-        return out
-        
-            
-        
+            ans.append([nums[i], nums[i + 1], nums[i + 2]])
+        return ans
