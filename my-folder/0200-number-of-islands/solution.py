@@ -1,13 +1,9 @@
-class Solution(object):
-    def numIslands(self, grid):
-        """
-        :type grid: List[List[str]]
-        :rtype: int
-        """
+class Solution:
+    def numIslands(self, grid: List[List[str]]) -> int:
+        dir=[(1,0),(0,1),(-1,0),(0,-1)]
+        island=0
         m=len(grid)
         n=len(grid[0])
-        island=0
-        dir=((1,0),(0,1),(-1,0),(0,-1))
         for i in range(m):
             for j in range(n):
                 if grid[i][j]=="1":
@@ -23,4 +19,3 @@ class Solution(object):
                                 grid[modi][modj]="0"
                                 q.append((modi,modj))
         return island
-                            
