@@ -1,12 +1,9 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
         coins.sort()
-        @cache
-        def rec(amount):
-            if amount==0:
-                return 0
-            if amount<0:
-                return float('inf')
-            return min((rec(amount-coin) for coin in coins if coin<=amount),default=float('inf'))+1
-        res=rec(amount)
-        return res if res!=float('inf') else -1
+        dp=[float('inf')]*(amount+1)
+        dp[0]=0
+        for c in coins:
+            for x in range(c,amount+1):
+                dp[x]=min(dp[x],dp[x-c]+1)
+        return dp[amount] if dp[amount]!=float('inf') else -1
