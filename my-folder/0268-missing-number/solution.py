@@ -1,12 +1,7 @@
-class Solution(object):
-    def missingNumber(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
-        nums.sort()
-        for i in range(len(nums)):
-            if i!=nums[i]:
-                return i
-        return len(nums)
-        
+class Solution:
+    def missingNumber(self, nums: List[int]) -> int:
+        nums_set=set(nums)
+        n=len(nums)+1
+        for num in range(n):
+            if num not in nums_set:
+                return num
