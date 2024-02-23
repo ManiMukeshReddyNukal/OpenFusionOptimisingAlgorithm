@@ -1,19 +1,22 @@
-class Solution:
-    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
-        def dfs(node):
-            path.append(node)
-            if node == len(graph) - 1:
-                paths.append(path.copy())
-                return
+class Solution(object):
+    def allPathsSourceTarget(self, graph):
+        """
+        :type graph: List[List[int]]
+        :rtype: List[List[int]]
+        """
+        paths=[]
+        path=[0]
+        q=[]
+        q.append(path)
+        while q:
+            route=q.pop(0)
+            node=route[-1]
+            for cn in graph[node]:
+                temp_route=deepcopy(route)
+                temp_route.append(cn)
+                if cn==len(graph)-1:
+                    paths.append(temp_route)
+                else:
+                    q.append(temp_route)
 
-            next_nodes = graph[node]
-            for next_node in next_nodes:
-                dfs(next_node)
-                path.pop()
-
-        paths = []
-        path = []
-        if not graph or len(graph) == 0:
-            return paths
-        dfs(0)
         return paths
