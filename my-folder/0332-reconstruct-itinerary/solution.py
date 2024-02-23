@@ -1,16 +1,17 @@
-class Solution:
-    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
-        graph = defaultdict(list)
-        
-        for src, dst in sorted(tickets, reverse=True):
-            graph[src].append(dst)
-            
-        itinerary = []
-        def dfs(airport):
-            while graph[airport]:
-                dfs(graph[airport].pop())
-            itinerary.append(airport)
-        
+class Solution(object):
+    def findItinerary(self, tickets):
+        """
+        :type tickets: List[List[str]]
+        :rtype: List[str]
+        """
+        graph=defaultdict(list)
+        itenary=[]
+        for ticket in sorted(tickets, reverse=True):
+            graph[ticket[0]].append(ticket[1])
+        def dfs(node):
+            while graph[node]:
+                dfs(graph[node].pop())
+            itenary.append(node)
         dfs("JFK")
-        
-        return itinerary[::-1]
+        return itenary[::-1]
+            
