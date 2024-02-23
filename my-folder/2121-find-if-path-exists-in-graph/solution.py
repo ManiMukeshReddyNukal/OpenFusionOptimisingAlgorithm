@@ -1,20 +1,22 @@
 class Solution(object):
     def validPath(self, n, edges, source, destination):
-        seen=[False]*n
-        graph = collections.defaultdict(list)
-        for a,b in edges:
+        """
+        :type n: int
+        :type edges: List[List[int]]
+        :type source: int
+        :type destination: int
+        :rtype: bool
+        """
+        graph=defaultdict(list)
+        for [a,b] in edges:
             graph[a].append(b)
             graph[b].append(a)
-        seen[source]=True
-        stack=[source]
-        while stack:
-            curr_node=stack.pop()
-            for next_node in graph[curr_node]:
-                if next_node == destination:
-                    return True
-                if not seen[next_node]:
-                    seen[next_node]=True
-                    stack.append(next_node)
-        return seen[destination]
-   
-        
+        q=[]
+        q.append(source)
+        while q:
+            node=q.pop(0)
+            if node==destination:
+                return True
+            while graph[node]:
+                q.append(graph[node].pop(0))
+        return False
