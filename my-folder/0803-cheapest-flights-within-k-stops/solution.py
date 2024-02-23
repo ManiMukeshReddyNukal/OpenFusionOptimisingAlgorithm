@@ -1,39 +1,30 @@
 import heapq
 
-class Solution:
-    def findCheapestPrice(self, n, flights, src, dst, K):
-        # Graph initialization
-        graph = {i: [] for i in range(n)}
-        for s, d, p in flights:
-            graph[s].append((d, p))
-        
-        # Priority queue: (cost, current node, stops made)
-        pq = [(0, src, 0)]
-        
-        # Visited dictionary to keep track of the least cost to a node with a given number of stops
-        visited = dict()
-        
+class Solution(object):
+    def findCheapestPrice(self, n, flights, src, dst, k):
+        """
+        :type n: int
+        :type flights: List[List[int]]
+        :type src: int
+        :type dst: int
+        :type k: int
+        :rtype: int
+        """
+        graph={i:[] for i in range(n)}
+        for [s,d,c] in flights:
+            graph[s].append((d,c))
+        pq=[(0,src,0)]
+        visited=dict()
         while pq:
-            cost, node, stops = heapq.heappop(pq)
-            
-            # If destination is reached, return the cost
-            if node == dst:
+            cost,city,stops=heapq.heappop(pq)
+            if city==dst:
                 return cost
-            
-            # If stops are over K, do not proceed further
-            if stops > K:
+            if stops>k:
                 continue
-            
-            # Avoid revisiting a node with the same or more number of stops at a higher or equal cost
-            if (node, stops) in visited and visited[(node, stops)] <= cost:
-                continue
-            visited[(node, stops)] = cost
-            
-            # Explore the next nodes
-            for next_node, price in graph[node]:
-                next_cost = cost + price
-                heapq.heappush(pq, (next_cost, next_node, stops + 1))
-        
-        # If destination is not reachable within K stops, return -1
+            if (city,stops) in visited and visited[(city,stops)]<=cost:
+                continue;
+            visited[(city,stops)]=cost
+            for (dest,price) in graph[city]:
+                updated_cost=cost+price
+                heapq.heappush(pq,(updated_cost,dest,stops+1))
         return -1
-
