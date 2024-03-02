@@ -1,17 +1,15 @@
-class Solution(object):
-    def sortedSquares(self, nums):
-        i = 0
-        j = maxindex = len(nums) - 1
-        op = [0] * len(nums)
-        while i <= j:
-            lq = nums[i] ** 2
-            rq = nums[j] ** 2
-            if lq > rq:
-                op[maxindex] = lq
-                i += 1
+class Solution:
+    def sortedSquares(self, nums: List[int]) -> List[int]:
+        n=len(nums)
+        l=0
+        r=n-1
+        result=[0 for _ in range(n)]
+        for i in range(n-1,-1,-1):
+            if abs(nums[l])<abs(nums[r]):
+                sq=nums[r]
+                r-=1
             else:
-                op[maxindex] = rq
-                j -= 1
-            maxindex -= 1
-        return op
-
+                sq=nums[l]
+                l+=1
+            result[i]=sq*sq
+        return result
