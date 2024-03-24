@@ -1,49 +1,34 @@
 class UnionFind:
-    
-    # For efficiency, we aren't using makeset, but instead initialising
-    # all the sets at the same time in the constructor.
-    def __init__(self, n):
-        self.parent = [node for node in range(n)]
-        
-    # The find method, without any optimizations. It traces up the parent
-    # links until it finds the root node for A, and returns that root.
-    def find(self, A):
-        while A != self.parent[A]:
-            A = self.parent[A]
-        return A
-        
-    # The union method, without any optimizations. It returns True if a
-    # merge happened, False if otherwise.
-    def union(self, A, B):
-        # Find the roots for A and B.
-        root_A = self.find(A)
-        root_B = self.find(B)
-        # Check if A and B are already in the same set.
-        if root_A == root_B:
+    def __init__(self,n):
+        self.root=[i for i in range(n)]
+        self.rank=[1 for _ in range(n)]
+    def find(self,x):
+        if x==self.root[x]:
+            return x
+        self.root[x]=self.find(self.root[x])
+        return self.root[x]
+    def union(self,x,y):
+        rootx=self.find(x)
+        rooty=self.find(y)
+        if rootx!=rooty:
+            if self.rank[rootx]>self.rank[rooty]:
+                self.root[rooty]=rootx
+            elif self.rank[rootx]<self.rank[rooty]:
+                self.root[rootx]=rooty
+            else:
+                self.root[rooty]=rootx
+                self.rank[rootx]+=1
+            return True
+        else:
             return False
-        # Merge the sets containing A and B.
-        self.parent[root_A] = root_B
-        return True
-
+    def isconnected(self,x,y):
+        return self.root[x]==self.root[y]
 class Solution:
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
-        if len(edges) != n - 1: return False
-        tree = UnionFind(n)
-        for edge in edges:
-            if not tree.union(edge[0],edge[1]):
+        if len(edges)!=n-1:
+            return False
+        uf=UnionFind(n)
+        for s,d in edges:
+            if not uf.union(s,d):
                 return False
         return True
-        # # Condition 1: The graph must contain n - 1 edges.
-        # if len(edges) != n - 1: return False
-        
-        # # Condition 2: The graph must contain a single connected component.
-        # # Create a new UnionFind object with n nodes. 
-        # unionFind = UnionFind(n)
-        # # Add each edge. Check if a merge happened, because if it 
-        # # didn't, there must be a cycle.
-        # for A, B in edges:
-        #     if not unionFind.union(A, B):
-        #         return False
-        # # If we got this far, there's no cycles!
-        # return True
-        
