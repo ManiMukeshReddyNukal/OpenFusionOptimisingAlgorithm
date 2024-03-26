@@ -4,14 +4,13 @@ class Solution(object):
         :type tickets: List[List[str]]
         :rtype: List[str]
         """
-        graph=defaultdict(list)
+        graph=collections.defaultdict(list)
+        for [src,dest] in sorted(tickets,reverse=True):
+            graph[src].append(dest)
         itenary=[]
-        for ticket in sorted(tickets, reverse=True):
-            graph[ticket[0]].append(ticket[1])
         def dfs(node):
             while graph[node]:
                 dfs(graph[node].pop())
             itenary.append(node)
         dfs("JFK")
         return itenary[::-1]
-            
