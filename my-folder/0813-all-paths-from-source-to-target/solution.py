@@ -1,22 +1,16 @@
-class Solution(object):
-    def allPathsSourceTarget(self, graph):
-        """
-        :type graph: List[List[int]]
-        :rtype: List[List[int]]
-        """
-        paths=[]
-        path=[0]
-        q=[]
-        q.append(path)
-        while q:
-            route=q.pop(0)
-            node=route[-1]
-            for cn in graph[node]:
-                temp_route=deepcopy(route)
-                temp_route.append(cn)
-                if cn==len(graph)-1:
-                    paths.append(temp_route)
-                else:
-                    q.append(temp_route)
-
+import copy
+class Solution:
+    def allPathsSourceTarget(self, graph: List[List[int]]) -> List[List[int]]:
+        paths = []
+        a = [[0]] 
+        while a:
+            path = a.pop() 
+            node = path[-1]  
+            if node == len(graph) - 1:
+                paths.append(path)
+                continue  
+            for n in graph[node]:
+                new_path = path + [n]  
+                a.append(new_path)          
         return paths
+
