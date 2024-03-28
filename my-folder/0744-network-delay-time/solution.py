@@ -1,31 +1,20 @@
-import heapq
-
 class Solution:
     def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
-        # Initialize the network graph
-        network = {}
-        for i in range(1, n + 1):
-            network[i] = []
-        for src, dest, time in times:
-            network[src].append((dest, time))
-        
-        # Initialize priority queue and minimum time dictionary
-        pq = []
-        mintime = {}
-        heapq.heappush(pq, (0, k))
-        
-        # Dijkstra's algorithm
+        graph={}
+        for i in range(1,n+1):
+            graph[i]=[]
+        for src,dest,weight in times:
+            graph[src].append([weight,dest])
+        pq=[]
+        heapq.heappush(pq,(0,k))
+        mintime={}
         while pq:
-            time, source = heapq.heappop(pq)
-            if source not in mintime:
-                mintime[source] = time
-                for d, t in network[source]:
-                    if d not in mintime:
-                        heapq.heappush(pq, (time + t, d))
-        
-        # Check if all nodes received the signal
-        if len(mintime) != n:
+            time,dest=heapq.heappop(pq)
+            if dest not in mintime:
+                mintime[dest]=time
+                for [t,adjn] in graph[dest]:
+                    if adjn not in mintime:
+                        heapq.heappush(pq,(t+time,adjn))
+        if len(mintime)!=n:
             return -1
-        
         return max(mintime.values())
-
