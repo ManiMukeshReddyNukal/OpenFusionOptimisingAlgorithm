@@ -12,7 +12,7 @@ class Solution:
                 return 0
             leftsum=max(dfs(node.left),0)
             rightsum=max(dfs(node.right),0)
-            s[0]=max(s[0],node.val+leftsum+rightsum)
-            return node.val+max(leftsum,rightsum)
-        dfs(root)
-        return s [0] 
+            s[0]=max(s[0],leftsum+rightsum+node.val)
+            return max(max(leftsum,rightsum)+node.val,node.val)
+        res=dfs(root)
+        return s[0]
