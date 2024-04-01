@@ -1,10 +1,11 @@
 class Solution:
     def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
-        graph={i:[] for i in range(numCourses)}
-        for a,b in prerequisites:
+        graph=collections.defaultdict(list)
+        for (a,b) in prerequisites:
             graph[a].append(b)
+        visited=set()
+        cycle=set()
         out=[]
-        visited,cycle=set(),set()
         def dfs(node):
             if node in cycle:
                 return False
