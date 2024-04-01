@@ -1,27 +1,25 @@
-from collections import deque
-
-class Solution(object):
-    def wallsAndGates(self, rooms):
-        if not rooms:
-            return
-        
-        rows, cols = len(rooms), len(rooms[0])
-        gates = deque()
-        
-        # Step 1: initialize the queue with all gates' positions
-        for i in range(rows):
-            for j in range(cols):
-                if rooms[i][j] == 0:
-                    gates.append((i, j))
-        
-        # Step 2: BFS from the gates to compute the shortest distance to each room
-        while gates:
-            row, col = gates.popleft()
-            
-            for dr, dc in ((1, 0), (-1, 0), (0, 1), (0, -1)):
-                r, c = row + dr, col + dc
-                # Proceed if it's a valid room and hasn't been visited yet (rooms[r][c] is INF)
-                if 0 <= r < rows and 0 <= c < cols and  (rooms[r][c] == 2147483647):
-                    rooms[r][c] = rooms[row][col] + 1  # Update distance to gate
-                    gates.append((r, c))  # Add new room position to queue
-
+class Solution:
+    def wallsAndGates(self, rooms: List[List[int]]) -> None:
+        """
+        Do not return anything, modify rooms in-place instead.
+        """
+        q=[]
+        visited=set()
+        n=len(rooms)
+        m=len(rooms[0])
+        for i in range(n):
+            for j in range(m):
+                if rooms[i][j]==0:
+                    q.append((i,j))
+                    visited.add((i,j))
+        dist=0
+        while q:
+            for _ in range(len(q)):
+                x,y=q.pop(0)
+                rooms[x][y]=dist
+                for dx,dy in [(1,0),(0,1),(-1,0),(0,-1)]:
+                    nx,ny=x+dx,y+dy
+                    if 0<=nx<n and 0<=ny<m and (nx,ny) not in visited and rooms[nx][ny]!=-1:
+                        q.append((nx,ny))
+                        visited.add((nx,ny))
+            dist+=1
