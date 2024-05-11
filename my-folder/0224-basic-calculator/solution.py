@@ -1,33 +1,42 @@
 class Solution:
     def calculate(self, s: str) -> int:
-        val=[]
-        sign=[]
-        operand=0
-        result=0
-        sg=+1
-        for c in s:
-            if c.isdigit():
-                operand=operand*10+int(c)
-            elif c == "+":
-                result+=sg*operand
-                # reset 
-                sg=+1
-                operand=0
-            elif c == "-":
-                result+=sg*operand
-                sg=-1
-                operand=0
-            elif c == "(":
-                val.append(result)
-                result=0
-                sign.append(sg)
-                sg=+1
-            elif c == ")":
-                result+=sg*operand
-                result*=sign.pop()
-                result+=val.pop()
-                operand=0
-        return result+sg*operand
+        s = s.replace(' ','')
+        closeind = {}
+        st = []
+        for i in range(len(s)):
+            if s[i] == '(': st.append(i)
+            if s[i] == ')':
+                closeind[st[-1]] = i
+                st.pop()
+        def findval(s,begin,end):
+            if begin>end or begin>=len(s): return 0
+            # if s[begin]=='(': return findval(s,begin+1,closeind[begin]-1)
+            val = 0
+            ind = begin
+            while ind<=end:
+                sign='+'
+                if s[ind]=='-':
+                    sign='-'
+                    ind+=1
+                if s[ind]=='+':
+                    ind+=1
+                i,j=ind,ind
+                while j<len(s) and s[j] not in '+-()':
+                    j+=1
+                curval = 0
+                if s[i]=='(':
+                    curval = findval(s,j+1,closeind[i]-1)
+                    ind = closeind[i]+1
+                else:
+                    # print(i,j)
+                    curval = int(s[i:j])
+                    ind = j
+                if sign=='+':
+                    val += curval
+                if sign=='-':
+                    val -= curval
+            return val
+        return findval(s,0,len(s)-1)
 
                 
            
