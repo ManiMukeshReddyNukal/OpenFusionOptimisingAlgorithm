@@ -1,23 +1,17 @@
-class Solution(object):
-    def lengthOfLongestSubstringKDistinct(self, s, k):
-        """
-        :type s: str
-        :type k: int
-        :rtype: int
-        """
-# sliding window
+class Solution:
+    def lengthOfLongestSubstringKDistinct(self, s: str, k: int) -> int:
+        if k==0:
+            return 0
+        distinct=defaultdict(int)
         n=len(s)
-        counter=collections.Counter()
-        max_len=0
-        left=0
-        for right in range(n):
-            counter[s[right]]+=1
-            while(len(counter))>k:
-                counter[s[left]]-=1
-                if counter[s[left]]==0:
-                    del counter[s[left]]
-                left+=1
-            max_len=max(max_len,right-left+1)
-        return max_len
-
-
+        l=0
+        ans=0
+        for r in range(n):
+            distinct[s[r]]+=1
+            while len(distinct.keys())>k:
+                distinct[s[l]]-=1
+                if distinct[s[l]]<=0:
+                    del distinct[s[l]]
+                l+=1  
+            ans=max(r-l+1,ans)
+        return ans
