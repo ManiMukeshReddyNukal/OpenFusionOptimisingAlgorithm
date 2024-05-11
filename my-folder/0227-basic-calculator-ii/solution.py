@@ -1,29 +1,49 @@
-class Solution(object):
-    def calculate(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        stack=[]
-        def append(operator,operand):
-            if operator=="+":
-                stack.append(operand)
-            elif operator=="-":
-                stack.append(-operand)
-            elif operator=="/":
-                a=stack.pop()
-                r=int(abs(a)/operand)
-                if a<0: stack.append(-r)
-                else: stack.append(r)
-            elif operator=="*":
-                stack.append(stack.pop() * operand)
-        operand,operator=0,"+"
-        for c in s:
-            if c in "0123456789":
-                operand=operand*10+int(c)
-            elif c in "+-/*":
-                append(operator,operand)
-                operand,operator=0,c
-        append(operator,operand)
-        return sum(stack)
-        
+class Solution:
+    def calculate(self, s: str) -> int:
+        s = s.replace(' ','')
+        def findint(s, begin, end):
+            val = 0
+            power = 1
+            for i in range(end,begin-1,-1):
+                val += power*int(s[i])
+                power*=10
+            return val
+        def evalmultdiv(s, begin, end):
+            ind = begin
+            val = 1
+            while ind<=end:
+                sign = '*'
+                if s[ind]=='/':
+                    ind+=1
+                    sign='/'
+                if s[ind]=='*':
+                    ind+=1
+                    sign='*'
+                i,j=ind,ind
+                while j<=end and s[j] not in '*/':
+                    j+=1
+                if sign == '*': val = val*findint(s,i,j-1)
+                if sign == '/': val = val//findint(s,i,j-1)
+                ind = j
+            return val
+
+        vals = []
+        ind = 0
+        val = 0
+        while ind<len(s):
+            sign = '+'
+            if s[ind]=='-':
+                sign = '-'
+                ind+=1
+            if s[ind]=='+': ind+=1
+            i,j=ind,ind
+            while j<len(s) and s[j] not in '+-':
+                j+=1
+            if sign=='+':
+                val += evalmultdiv(s,i,j-1)
+            else:
+                val -= evalmultdiv(s,i,j-1)
+            ind=j
+        return val
+
+
