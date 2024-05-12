@@ -1,30 +1,39 @@
 class Solution:
     def characterReplacement(self, s: str, k: int) -> int:
-        all_letters = set(s)
-        max_length = 0
-
-        # iterate over each unique letter
-        for letter in all_letters:
-            start = 0
-            count = 0
-
-            # initialize a sliding window for each unique letter
-            for end in range(len(s)):
-                if s[end] == letter:
-                    # if the letter matches, increase the count
-                    count += 1
-
-                # bring start forward until the window is valid again
-                while not self.__is_window_valid(start, end, count, k):
-                    if s[start] == letter:
-                        # if the letter matches, decrease the count
-                        count -= 1
+        def sumofotherchars(dic):
+            maxchar, maxcount = '',0
+            for k,v in dic.items():
+                if v>maxcount:
+                    maxchar=k
+                    maxcount=v
+            c = maxchar
+            total = 0
+            for k,v in dic.items():
+                if k!=c: total+=v
+            return total
+        dic = {}
+        start = 0
+        n=len(s)
+        maxlen = 0
+        for i in range(n):
+            if sumofotherchars(dic)==k:
+                # print(dic, start)
+                if s[i] not in dic:
+                    dic[s[i]] = 0
+                dic[s[i]] += 1
+                # print(dic,start, i)
+                # print(sumofotherchars(dic))
+                while sumofotherchars(dic) > k:
+                    # print(sumofotherchars(dic)
+                    # print(dic,start)
+                    dic[s[start]]-=1
+                    if not dic[s[start]]: del dic[s[start]]
                     start += 1
-
-                # at this point the window is valid, update max_length
-                max_length = max(max_length, end + 1 - start)
-
-        return max_length
-
-    def __is_window_valid(self, start: int, end: int, count: int, k: int):
-        return end + 1 - start - count <= k
+                    # print(dic,start)
+                maxlen = max(maxlen, i-start+1)
+            else:
+                # print(dic)
+                if s[i] not in dic: dic[s[i]] = 0
+                dic[s[i]]+=1
+                maxlen = max(maxlen, i-start+1)
+        return maxlen
