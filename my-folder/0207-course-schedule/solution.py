@@ -1,25 +1,24 @@
 class Solution:
-    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
-        graph=collections.defaultdict(list)
-        indegre=[0]*numCourses
-        for (a,b) in prerequisites:
-            graph[a].append(b)
-            indegre[b]+=1
-        q=collections.deque()
-        for i in range(numCourses):
-            if indegre[i]==0:
-                q.append(i)
-        processorder=[]
-        processcount=0
-        while q:
-            node=q.popleft()
-            for adjnode in graph[node]:
-                indegre[adjnode]-=1
-                if indegre[adjnode]<=0:
-                    q.append(adjnode)
-            processorder.append(node)
-            processcount+=1
-        print(processorder[::-1])
-        if processcount==numCourses:
-            return True
-        return False
+    def canFinish(self, n: int, edges: List[List[int]]) -> bool:
+        adj = [[] for i in range(n)]
+        for e in edges:
+            adj[e[1]].append(e[0])
+        vis=set()
+        for i in range(n):
+            if i in vis: continue
+            st = [(i,iter(adj[i]))]
+            stset = set([i])
+            while st:
+                # print([j for j,_ in st])
+                curnode, it = st[-1]
+                neigh = next(it, None)
+                if neigh==None:
+                    vis.add(curnode)
+                    stset.remove(curnode)
+                    st.pop()
+                    continue
+                if neigh in stset: return False
+                if neigh not in vis:
+                    stset.add(neigh)
+                    st.append((neigh,iter(adj[neigh])))
+        return True
