@@ -1,31 +1,20 @@
-class UnionFind:
-    def __init__(self,n):
-        self.root=[i for i in range(n)]
-        self.rank=[1 for _ in range(n)]
-    def find(self,x):
-        if x==self.root[x]:
-            return x
-        self.root[x]=self.find(self.root[x])
-        return self.root[x]
-    def union(self,x,y):
-        rootx=self.find(x)
-        rooty=self.find(y)
-        if rootx!=rooty:
-            if self.rank[rootx]>self.rank[rooty]:
-                self.root[rooty]=rootx
-            elif self.rank[rootx]<self.rank[rooty]:
-                self.root[rootx]=rooty
-            else:
-                self.root[rooty]=rootx
-                self.rank[rootx]+=1
-    def isConnected(self,x,y):
-        return self.root[x]==self.root[y]
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
-        uf=UnionFind(n)
-        for s,d in edges:
-            uf.union(s,d)
-        p=set()
+        adj = [[] for i in range(n)]
+        for e in edges:
+            adj[e[0]].append(e[1])
+            adj[e[1]].append(e[0])
+        vis = set()
+        count = 0
         for i in range(n):
-            p.add(uf.find(i))
-        return len(p)
+            if i in vis: continue
+            count += 1
+            st = [i]
+            vis.add(i)
+            while st:
+                curnode = st.pop()
+                for neigh in adj[curnode]:
+                    if neigh not in vis:
+                        vis.add(neigh)
+                        st.append(neigh)
+        return count
