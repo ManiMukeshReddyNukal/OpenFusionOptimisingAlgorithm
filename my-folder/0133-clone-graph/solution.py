@@ -15,9 +15,7 @@ class Solution:
             return node
         if node in self.visited:
             return self.visited[node]
-        clone_node=Node(node.val,[])
-        self.visited[node]=clone_node
-        if node.neighbors:
-            clone_node.neighbors=[self.cloneGraph(n) for n in node.neighbors]
-        return clone_node
-
+        copy=Node(node.val, [])
+        self.visited[node]=copy
+        copy.neighbors=[self.cloneGraph(children) for children in node.neighbors]
+        return copy
