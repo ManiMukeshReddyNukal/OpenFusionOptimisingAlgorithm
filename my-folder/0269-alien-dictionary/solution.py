@@ -1,46 +1,43 @@
-from collections import defaultdict
+from collections import deque, defaultdict
 
 class Solution:
     def alienOrder(self, words: List[str]) -> str:
+        # Create a set of all unique characters
+        uniqchars = set("".join(words))
+        # Initialize graph and in-degree count
         graph = defaultdict(set)
-        # Initialize graph with all unique characters to ensure they're included in the final graph
-        unique_chars = set(''.join(words))
-        for char in unique_chars:
-            graph[char] = set()
-
-        n = len(words)
-        for i in range(n - 1):
+        inorder = {char: 0 for char in uniqchars}
+        
+        # Build the graph
+        for i in range(len(words) - 1):
             word1, word2 = words[i], words[i + 1]
             minlen = min(len(word1), len(word2))
+            # Check for a prefix condition that would indicate an invalid input
             if len(word1) > len(word2) and word1[:minlen] == word2[:minlen]:
                 return ""
+            # Build the graph from the first point of difference
             for j in range(minlen):
                 if word1[j] != word2[j]:
-                    graph[word1[j]].add(word2[j])
+                    if word2[j] not in graph[word1[j]]:
+                        graph[word1[j]].add(word2[j])
+                        inorder[word2[j]] += 1
                     break
-
-        visit = {}
+        
+        # Use Kahn's algorithm for topological sorting
+        queue = deque([char for char in inorder if inorder[char] == 0])
         res = []
-        def dfs(c):
-            if c in visit:
-                return visit[c]
-            visit[c] = True
-            for nc in graph[c]:
-                if dfs(nc):
-                    return True
-            visit[c] = False
-            res.append(c)
-            return False
-
-        # Use a static list of keys for safe iteration
-        for c in list(graph.keys()):
-            if dfs(c):
-                return ""
-
-        res.reverse()
+        
+        while queue:
+            node = queue.popleft()
+            res.append(node)
+            for neighbor in graph[node]:
+                inorder[neighbor] -= 1
+                if inorder[neighbor] == 0:
+                    queue.append(neighbor)
+        
+        # If the result does not contain all characters, there must be a cycle
+        if len(res) != len(uniqchars):
+            return ""
+        
         return "".join(res)
-
-# Your test case
-solution = Solution()
-print(solution.alienOrder(["z", "z"]))
 
