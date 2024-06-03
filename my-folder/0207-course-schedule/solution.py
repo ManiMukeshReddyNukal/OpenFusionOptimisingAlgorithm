@@ -1,24 +1,20 @@
 class Solution:
-    def canFinish(self, n: int, edges: List[List[int]]) -> bool:
-        adj = [[] for i in range(n)]
-        for e in edges:
-            adj[e[1]].append(e[0])
-        vis=set()
-        for i in range(n):
-            if i in vis: continue
-            st = [(i,iter(adj[i]))]
-            stset = set([i])
-            while st:
-                # print([j for j,_ in st])
-                curnode, it = st[-1]
-                neigh = next(it, None)
-                if neigh==None:
-                    vis.add(curnode)
-                    stset.remove(curnode)
-                    st.pop()
-                    continue
-                if neigh in stset: return False
-                if neigh not in vis:
-                    stset.add(neigh)
-                    st.append((neigh,iter(adj[neigh])))
-        return True
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        adj={i:[] for i in range(numCourses)}
+        indegree=[0]*numCourses
+        for a,b in prerequisites:
+            adj[b].append(a)
+            indegree[a]+=1
+        q=deque()
+        for i in range(numCourses):
+            if indegree[i]==0:
+                q.append(i)
+        noofcourses=0
+        while q:
+            node=q.pop()
+            noofcourses+=1
+            for c in adj[node]:
+                indegree[c]-=1
+                if indegree[c]==0:
+                    q.append(c)
+        return noofcourses==numCourses
