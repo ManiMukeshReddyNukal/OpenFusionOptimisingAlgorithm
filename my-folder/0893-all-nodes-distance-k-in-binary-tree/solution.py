@@ -7,33 +7,32 @@
 
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        
-        if not k:
+        if k==0:
             return [target.val]
-
-        
-        graph = collections.defaultdict(list)
-        queue=collections.deque([root])
-        while queue :
-            node=queue.popleft()
+        graph=defaultdict(list)
+        q=deque([root])
+        while q:
+            node=q.popleft()
             if node.left:
                 graph[node].append(node.left)
                 graph[node.left].append(node)
-                queue.append(node.left)
+                q.append(node.left)
             if node.right:
                 graph[node].append(node.right)
                 graph[node.right].append(node)
-                queue.append(node.right)
-        visited=set([target])
-        res=[]
-        queue=collections.deque([(target,0)])
-        while queue:
-                node,distance=queue.popleft()
-                if distance==k:
-                    res.append(node.val)
-                else:
-                    for edge in graph[node]:
-                        if edge not in visited :
-                            visited.add(edge)
-                            queue.append((edge,distance+1))
-        return res
+                q.append(node.right)
+        dist=-1
+        visited=set()
+        q=deque([target])
+        while q :
+            noofnodes=len(q)
+            dist+=1
+            if dist==k:
+                return [ node.val for node in q]
+            for i in range(noofnodes):
+                node=q.popleft()
+                visited.add(node)
+                for adjnodes in graph[node]:
+                    if adjnodes in visited: continue
+                    q.append(adjnodes)
+        return []
