@@ -1,25 +1,30 @@
 class Solution:
     def minCostConnectPoints(self, points: List[List[int]]) -> int:
-        n=len(points)
-        graph={}
-        for i in range(n):
-            graph[i]=[]
-        for i in range(n):
-            for j in range(n):
-                if j!=i:
+        def nested_dict():
+            return defaultdict(nested_dict)
+        graph=defaultdict(nested_dict)
+        m=len(points)
+        n=len(points[0])
+        for i in range(m):
+            for j in range(m):
+                if i!=j:
                     dist=abs(points[i][0]-points[j][0])+abs(points[i][1]-points[j][1])
-                    graph[i].append((j,dist))
-                    graph[j].append((i,dist))
-        pq=[(0,0)]
+                    graph[i][j]=dist
+                    graph[j][i]=dist
+        minheap=[]
+        heapq.heappush(minheap, (0,0))
+        mincost=0
         visited=set()
-        cost=0
-        while pq:
-            d,node=heapq.heappop(pq)
-            if node in visited:
-                continue
-            visited.add(node)
-            cost+=d
-            for neighbor,distance in graph[node]:
-                if neighbor not in visited:
-                    heapq.heappush(pq,(distance,neighbor))
-        return cost if len(visited)==n else -1
+        while minheap:
+            distance,node=heapq.heappop(minheap)
+            if node not in visited:
+                mincost+=distance
+                visited.add(node)
+                for adjnode,adjdist in graph[node].items():
+                    heapq.heappush(minheap, (adjdist,adjnode))
+        if len(visited)==m: 
+            return mincost
+        else:
+            return -1
+
+
