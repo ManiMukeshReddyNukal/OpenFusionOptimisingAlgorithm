@@ -1,20 +1,15 @@
-from collections import Counter
-class Solution(object):
-    def lengthOfLongestSubstring(self, s):
-        """
-        :type s: str
-        :rtype: int
-        """
-        n=len(s)
-        i=0
-        j=0
-        m=0
-        d=collections.defaultdict()
-        while j<n:
-          d[s[j]]=d.get(s[j],0)+1
-          while d[s[j]]>1:
-            d[s[i]]-=1
-            i+=1
-          m=max(m,j-i+1)
-          j+=1
-        return m
+class Solution:
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        if not s:
+            return 0
+        l=0
+        uniq=set()
+        uniq.add(s[0])
+        maxlen=len(uniq)
+        for r in range(1,len(s)):
+            while s[r] in uniq:
+                uniq.remove(s[l])
+                l+=1
+            uniq.add(s[r])
+            maxlen=max(len(uniq),maxlen)
+        return maxlen
