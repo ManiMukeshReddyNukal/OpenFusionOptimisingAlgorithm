@@ -5,8 +5,8 @@ class Solution(object):
         :type k: int
         :rtype: List[int]
         """
-        q=deque()
         res=[]
+        q=deque()
         for i in range(k):
             while q and nums[i]>nums[q[-1]]:
                 q.pop()
