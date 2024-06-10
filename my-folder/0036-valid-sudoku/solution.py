@@ -1,27 +1,18 @@
-class Solution(object):
-    def isValidSudoku(self, board):
-        """
-        :type board: List[List[str]]
-        :rtype: bool
-        """
-        N=9
-        row=[set() for _ in range(N)]
-        col=[set() for _ in range(N)]
-        box=[set() for _ in range(N)]
-        for m in range(N):
-            for n in range(N):
-                val=board[m][n]
-                if val ==".":
-                    continue
-                if val in row[n]:
-                    return False
-                row[n].add(val)
-                if val in col[m]:
-                    return False
-                col[m].add(val)
-                idx=m//3*3+n//3
-                if val in box[idx]:
-                    return False
-                box[idx].add(val)
+class Solution:
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
+        rowdict=defaultdict(set)
+        coldict=defaultdict(set)
+        boxdict=defaultdict(set)
+        n=len(board)
+        m=len(board[0])
+        for i in range(n):
+            for j in range(m):
+                if board[i][j]!=".":
+                    boxno=(i//3)*3+(j//3)
+                    if board[i][j] in rowdict[i] or board[i][j] in coldict[j] or board[i][j] in boxdict[boxno]:
+                        return False
+                    rowdict[i].add(board[i][j])
+                    coldict[j].add(board[i][j])
+                    boxdict[boxno].add(board[i][j])
         return True
-                
+
