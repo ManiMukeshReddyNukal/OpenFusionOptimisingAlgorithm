@@ -12,10 +12,14 @@ class Solution:
         self.visited={}
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         if not node:
-            return node
-        if node in self.visited:
-            return self.visited[node]
-        copy=Node(node.val, [])
-        self.visited[node]=copy
-        copy.neighbors=[self.cloneGraph(children) for children in node.neighbors]
-        return copy
+            return
+        if node.val in self.visited:
+            return self.visited[node.val]
+        cp=Node(node.val)
+        self.visited[node.val]=cp
+        ns=node.neighbors
+        cns=[]
+        for nd in ns:
+            cns.append(self.cloneGraph(nd))
+        cp.neighbors=cns
+        return cp
