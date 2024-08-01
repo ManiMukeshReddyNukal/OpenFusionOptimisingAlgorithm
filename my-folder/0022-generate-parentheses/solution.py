@@ -4,18 +4,20 @@ class Solution(object):
         :type n: int
         :rtype: List[str]
         """
-        stack=[]
-        result=[]
+        output=[]
+        curr=[]
         def backtrack(open,close):
             if open==close==n:
-                result.append("".join(stack))
+                output.append("".join(curr))
+                return
             if open<n:
-                stack.append("(")
+                curr.append("(")
                 backtrack(open+1,close)
-                stack.pop()
+                curr.pop()
             if close<open:
-                stack.append(")")
+                curr.append(")")
                 backtrack(open,close+1)
-                stack.pop()
+                curr.pop()
         backtrack(0,0)
-        return result
+        return output
+        
