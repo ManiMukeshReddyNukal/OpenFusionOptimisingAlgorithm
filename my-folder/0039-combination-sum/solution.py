@@ -1,15 +1,16 @@
 class Solution:
     def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
-        results=[]
-        def backtrack(bal,comb,start):
-            if bal==0:
-                results.append(list(comb))
+        output=[]
+        curr=[]
+        def dfs(i,curr,currentsum):
+            if currentsum==target:
+                output.append(curr.copy())
+                return  
+            if i>=len(candidates) or currentsum>target:
                 return
-            if bal<0:
-                return
-            for i in range(start,len(candidates)):
-                comb.append(candidates[i])
-                backtrack(bal-candidates[i],comb,i)
-                comb.pop()
-        backtrack(target,[],0)
-        return results
+            curr.append(candidates[i])
+            dfs(i, curr, currentsum+candidates[i])
+            curr.pop()
+            dfs(i+1, curr, currentsum)
+        dfs(0,[],0)
+        return output
