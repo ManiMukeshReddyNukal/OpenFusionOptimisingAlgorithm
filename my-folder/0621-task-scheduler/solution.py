@@ -4,7 +4,7 @@ class Solution:
         for task in tasks:
             c[ord(task)-ord('A')]+=1
         pq=[-f for f in c if f>0]
-        heapq.heapify(pq)
+        heapq.heapify(pq) 
         time=0
         while pq:
             cycle=n+1
