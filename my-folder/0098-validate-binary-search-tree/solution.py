@@ -8,14 +8,14 @@ class Solution:
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         if not root:
             return True
-        stack=[(root,-math.inf, math.inf)]
+        stack=[(root,-math.inf,math.inf)]
         while stack:
-            root,lower,higher=stack.pop()
-            if not root:
+            node,lower,higher=stack.pop()
+            if not node:
                 continue
-            val=root.val
+            val=node.val
             if val<=lower or val>=higher:
                 return False
-            stack.append((root.right,val,higher))
-            stack.append((root.left,lower,val))
+            stack.append((node.right,val,higher))
+            stack.append((node.left,lower,val))
         return True
