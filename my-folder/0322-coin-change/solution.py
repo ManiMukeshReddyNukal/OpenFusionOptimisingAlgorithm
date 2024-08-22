@@ -1,8 +1,7 @@
 class Solution:
     def coinChange(self, coins: List[int], amount: int) -> int:
-        coins.sort()
         dp=[math.inf]*(amount+1)
-        ### selecting nothing is one way of getting 0 sum
+        coins.sort()
         dp[0]=0
         for c in coins:
             for i in range(c,amount+1):
