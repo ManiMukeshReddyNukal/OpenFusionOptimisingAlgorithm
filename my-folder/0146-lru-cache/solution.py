@@ -1,53 +1,56 @@
-class ListNode:
-    def __init__(self, key, val):
-        self.key = key
-        self.val = val
-        self.pre = None
-        self.next = None
-
-
+class TreeNode:
+    def __init__(self,key,value):
+        self.key=key
+        self.value= value
+        self.prev=None
+        self.next=None
 class LRUCache:
-
     def __init__(self, capacity: int):
-        self.capacity = capacity
+        self.capacity=capacity
         self.dic = {}
-        self.head = ListNode(-1, -1)
-        self.tail = ListNode(-1, -1)
-        self.head.next = self.tail
-        self.tail.pre = self.head
+        self.head=TreeNode(-1, -1)
+        self.tail=TreeNode(-1, -1)
+        self.head.next=self.tail
+        self.tail.prev=self.head
 
-    # to remove from in btwn the list
-    def remove(self, node):
-        node.pre.next = node.next
-        node.next.pre = node.pre
 
-    # to add to the top of queue
-    def add(self, node):
-        previous_end = self.tail.pre
-        previous_end.next = node
-        node.pre = previous_end
-        node.next = self.tail
-        self.tail.pre = node
+    # remove from middle of linkedlist 
+    def remove(self, node:TreeNode):
+        node.prev.next=node.next
+        node.next.prev=node.prev
+    
+    # add at the 
+    def add(self, node: TreeNode):
+        temp = self.head.next
+        node.next=temp
+        temp.prev=node
+        self.head.next=node
+        node.prev=self.head
 
     def get(self, key: int) -> int:
         if key not in self.dic:
             return -1
         node = self.dic[key]
+        # remove from position 
+        # add at head
         self.remove(node)
         self.add(node)
-        return node.val
+        return node.value
+        
 
     def put(self, key: int, value: int) -> None:
         if key in self.dic:
-            old_node = self.dic[key]
+            old_node=self.dic[key]
             self.remove(old_node)
-        node = ListNode(key, value)
-        self.dic[key] = node
+        node = TreeNode(key, value)
+        self.dic[key]=node
         self.add(node)
-        if len(self.dic) > self.capacity:
-            node_to_delete = self.head.next
-            self.remove(node_to_delete)
+        if (len(self.dic)>self.capacity):
+            node_to_delete=self.tail.prev
             del self.dic[node_to_delete.key]
+            self.remove(node_to_delete)
+
+
 
 # Your LRUCache object will be instantiated and called as such:
 # obj = LRUCache(capacity)
