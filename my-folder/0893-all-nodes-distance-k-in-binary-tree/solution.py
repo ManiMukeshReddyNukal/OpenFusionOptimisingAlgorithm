@@ -7,12 +7,10 @@
 
 class Solution:
     def distanceK(self, root: TreeNode, target: TreeNode, k: int) -> List[int]:
-        if k==0:
-            return [target.val]
-        graph=defaultdict(list)
         q=deque([root])
+        graph= defaultdict(list)
         while q:
-            node=q.popleft()
+            node = q.pop()
             if node.left:
                 graph[node].append(node.left)
                 graph[node.left].append(node)
@@ -21,18 +19,18 @@ class Solution:
                 graph[node].append(node.right)
                 graph[node.right].append(node)
                 q.append(node.right)
-        dist=-1
-        visited=set()
+        distance=-1
         q=deque([target])
-        while q :
-            noofnodes=len(q)
-            dist+=1
-            if dist==k:
-                return [ node.val for node in q]
-            for i in range(noofnodes):
-                node=q.popleft()
+        visited=set()
+        while q:
+            distance+=1
+            n=len(q)
+            if distance==k:
+                return [node.val for node in q]
+            for i in range(n):
+                node = q.pop()
                 visited.add(node)
-                for adjnodes in graph[node]:
-                    if adjnodes in visited: continue
-                    q.append(adjnodes)
+                for adjnode in graph[node]:
+                    if adjnode in visited: continue
+                    q.appendleft(adjnode)
         return []
