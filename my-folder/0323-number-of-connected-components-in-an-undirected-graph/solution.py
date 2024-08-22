@@ -1,21 +1,22 @@
 class Solution:
     def countComponents(self, n: int, edges: List[List[int]]) -> int:
-        adj = [[] for i in range(n)]
-        for e in edges:
-            adj[e[0]].append(e[1])
-            adj[e[1]].append(e[0])
-        vis=set()
         count=0
+        visited=set()
+        m= defaultdict(list)
+        for edge in edges:
+            m[edge[0]].append(edge[1])
+            m[edge[1]].append(edge[0])
         for i in range(n):
-            if i in vis: continue
+            if i in visited:
+                continue
+            visited.add(i)
             count+=1
-            vis.add(i)
-            q=[i]
+            q=deque()
+            q.append(i)
             while q:
-                node=q.pop()
-                for adjnodes in adj[node]:
-                    if adjnodes not in vis:
-                        vis.add(adjnodes)
-                        q.append(adjnodes)
+                node = q.pop()
+                for adjnode in m[node]:
+                    if adjnode not in visited:
+                        q.append(adjnode)
+                        visited.add(adjnode)
         return count
-
