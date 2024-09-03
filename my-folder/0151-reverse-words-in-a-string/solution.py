@@ -1,40 +1,50 @@
 class Solution:
-    def trim(self, s):
+    def reverseWords(self, s: str) -> str:
+        s = self.trim(s)
+        s = self.reverse(s, 0, len(s) - 1)
+        s = self.reverse_each_word(s)
+        return s
+
+    def trim(self, s: str) -> str:
         left, right = 0, len(s) - 1
-        while left <= right and s[left] == " ":
+        while left < len(s) and s[left] == " ":
             left += 1
-        while left <= right and s[right] == " ":
+        while right >= 0 and s[right] == " ":
             right -= 1
+        
         output = []
         while left <= right:
             if s[left] != " ":
                 output.append(s[left])
-            elif output[-1] != " ":
+            elif output and output[-1] != " ":
                 output.append(s[left])
             left += 1
-        return output
-
-    def reverse(self, l, left, right):
+            
+        return "".join(output)
+    
+    def reverse(self, s: str, left: int, right: int) -> str:
+        s = list(s)  # Convert to list for mutable operations
         while left < right:
-            l[left], l[right] = l[right], l[left]
+            s[left], s[right] = s[right], s[left]
             left += 1
             right -= 1
-
-    def reverse_each_word(self, l):
-        left, right = 0, 0
-        while left < len(l):
-            while right < len(l) and l[right] != " ":
+        return "".join(s)  # Convert back to string
+    
+    def reverse_each_word(self, s: str) -> str:
+        s = list(s)  # Convert to list for mutable operations
+        n = len(s)
+        left = 0
+        while left < n:
+            right = left
+            while right < n and s[right] != " ":
                 right += 1
-            # Reverse the current word
-            self.reverse(l, left, right - 1)
+            self.reverse_list(s, left, right - 1)
             left = right + 1
-            right += 1
-
-    def reverseWords(self, s: str) -> str:
-        l = self.trim(s)  # Remove leading/trailing and multiple spaces
-        print(l)
-        self.reverse(l, 0, len(l) - 1)  # Reverse the entire list
-        self.reverse_each_word(l)  # Reverse each word
-        print(l)
-        return "".join(l)  # Join the list into a string
+        return "".join(s)  # Convert back to string
+    
+    def reverse_list(self, s: list, left: int, right: int) -> None:
+        while left < right:
+            s[left], s[right] = s[right], s[left]
+            left += 1
+            right -= 1
 
