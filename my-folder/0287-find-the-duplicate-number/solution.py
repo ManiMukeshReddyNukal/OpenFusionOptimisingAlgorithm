@@ -1,14 +1,11 @@
-class Solution:
-    def findDuplicate(self, nums: List[int]) -> int:
-        l=1
-        r=len(nums)-1
-        while l<=r:
-            c=(l+r)//2
-            count=0
-            count=sum(num<=c for num in nums)
-            if count>c:
-                duplicate=c
-                r=c-1
-            else:
-                l=c+1
-        return duplicate
+class Solution(object):
+    def findDuplicate(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        starti=nums[0]
+        while nums[starti]>0:
+            nums[starti]=-1*nums[starti]
+            starti=abs(nums[starti])
+        return abs(starti)
