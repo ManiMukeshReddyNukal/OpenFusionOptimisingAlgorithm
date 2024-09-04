@@ -1,11 +1,10 @@
 class Solution:
     def isValid(self, s: str) -> bool:
         q=[]
-        d={"}":"{",")":"(","]":"["}
+        dt={"}":"{",")":"(","]":"["}
         for c in s:
-            if c not in d:
+            if c not in dt:
                 q.append(c)
-            elif q==[] or d[c]!=q.pop():
-                return False       
+            elif q==[] or dt[c]!=q.pop():
+                return False
         return q==[]
-
