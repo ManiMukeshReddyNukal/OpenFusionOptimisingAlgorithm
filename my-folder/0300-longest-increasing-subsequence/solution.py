@@ -1,10 +1,15 @@
-class Solution:
-    def lengthOfLIS(self, nums: List[int]) -> int:
-        sub=[]
-        for num in nums:
-            i=bisect_left(sub,num)
-            if i==len(sub):
-                sub.append(num)
+class Solution(object):
+    def lengthOfLIS(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        arr=[]
+        n=len(nums)
+        for i in range(n):
+            idx=bisect_left(arr,nums[i])
+            if idx>=len(arr):
+                arr.append(nums[i])
             else:
-                sub[i]=num
-        return len(sub)
+                arr[idx]=nums[i]
+        return len(arr)
