@@ -7,10 +7,9 @@ class Solution:
             startIndex=i
             while stack and h<stack[-1][1]:
                 startIndex,height=stack.pop()
-                marea=max(height*(i-startIndex),marea)
+                marea=max(marea,height*(i-startIndex))
             stack.append([startIndex,h])
         while stack:
             startIndex,height=stack.pop()
             marea=max(height*(n-startIndex),marea)
         return marea
-
