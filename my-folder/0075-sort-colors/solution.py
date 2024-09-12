@@ -4,8 +4,18 @@ class Solution:
         Do not return anything, modify nums in-place instead.
         """
         n=len(nums)
-        for i in range(n):
-            for j in range(n-i-1):
-                if nums[j]>nums[j+1]:
-                    nums[j],nums[j+1]=nums[j+1],nums[j]
+        i=0
+        j=n-1
+        k=0
+        while k<=j:
+            if nums[k]==0:
+                nums[i],nums[k]=nums[k],nums[i]
+                i+=1
+                k+=1
+            elif nums[k]==2:
+                nums[k],nums[j]=nums[j],nums[k]
+                j-=1
+            else:
+                k+=1
         return nums
+
